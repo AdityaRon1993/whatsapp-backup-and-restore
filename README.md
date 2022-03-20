@@ -90,6 +90,12 @@ before taking a backup there are a few prerequisites :
 </p>
 
 
+Just run *wabr* in the terminal
+```bash
+$ wabr
+```
+follow instructions to backup or restore Whatsapp Chats
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 

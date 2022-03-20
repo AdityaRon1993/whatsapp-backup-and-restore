@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import * as _c from '../constant.mjs';
 
-const adb_path = path.join(__dirname, '..', '..', '_adb', process.platform, './adb');
+const adb_path = path.join(__dirname, '..', '..', '_adb', process.platform, `./adb${process.platform=='win32'?'.exe':''}`);
 
 const executeAdbCommand = async (command, options = {}) => {
     let output = {

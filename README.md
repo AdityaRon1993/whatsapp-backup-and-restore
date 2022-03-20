@@ -43,8 +43,10 @@ before taking a backup there are a few prerequisites :
 > 3. go to developer options
 
 <p align="center">
-   <img src="..." width=310 />
+   <img src="https://user-images.githubusercontent.com/52491220/159177768-396abbb8-0ba7-46a2-bc39-5bc701f1e1c3.png" width=310 />
+   <img src="https://user-images.githubusercontent.com/52491220/159177772-6406a716-9535-4315-a23d-7a24a75770e5.png" width=310 />
 </p>
+
 
 > 4. Turn on USB debugging.
 

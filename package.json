@@ -1,6 +1,6 @@
 {
   "name": "whatsapp-backup-and-restore",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Backup and restore whatsapp chat and media",
   "main": "bin/index.js",
   "type": "module",
@@ -31,7 +31,6 @@
     "chalk-animation": "^1.6.0",
     "figlet": "^1.5.2",
     "gradient-string": "^2.0.0",
-    "inquirer": "^8.2.1",
-    "nanospinner": "^1.0.0"
+    "inquirer": "^8.2.1"
   }
 }

@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 const backupLocation = path.join(__dirname, '..', '..', 'backups');
 
 const restoreBackup = async ({ deviceId, backupFilename }) => {
-    let fileLocation = path.join(backupLocation,backupFilename,'TEST')
+    let fileLocation = path.join(backupLocation,backupFilename,'WhatsApp')
     const isExists = fs.existsSync(fileLocation);
     if(!isExists) return 1;
     const output = await adbStartRestoration({

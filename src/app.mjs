@@ -100,16 +100,16 @@ Before we backup Whatsapp Chat there are some prerequisites :
             });
 
             console.log(
-                gradient.pastel.multiline(`                This will create the chat backup on your Android phone.
-                This process might take some time`)
+                gradient.pastel.multiline(`
+                                This will create the chat backup on your Android phone.
+                This process might take some time
+                `)
             );
             await printCenter({
                 str: '*******************************************************************************************************',
                 maxLength: titleLength,
                 gradient: gradient.atlas.multiline
             });
-
-
 
             const continuePrompt = await list({
                 name: 'continue Prompt',
@@ -139,7 +139,14 @@ const createWhatsappBackup = async () => {
         if (tryAgain == 'YES') return createWhatsappBackup();
         else return process.exit(1);
     }
-    console.log(selecedDevice);
+
+    const _continue = await list({
+        name: 'Continue',
+        message: gradient.pastel.multiline('Do you want to continue and take a backup of your WhatsApp Chat'),
+        choices: ['YES', 'NO']
+    });
+    if (_continue != 'YES') process.exit(1);
+
     const { status } = await takeBackup();
     if (!status) {
         const tryAgain = await list({
@@ -164,7 +171,7 @@ const createWhatsappBackup = async () => {
 
 const getDevices = async () => {
     let sDevice;
-    while(!sDevice?.authorized){
+    while (!sDevice?.authorized) {
         console.log('\n\n');
         const res = await executeAdbCommand(_c.commands.GET_ALL_DEVICES);
         let values = {};
@@ -178,7 +185,7 @@ const getDevices = async () => {
         }
         if (choices.length == 0) {
             await wabrConsole.error('No devices found');
-    
+
             await list({
                 name: 'no_device_available',
                 message: gradient.pastel.multiline('Enable Debugger mode and connect device.'),
@@ -196,9 +203,26 @@ const getDevices = async () => {
             ];
         if (!device?.authorized) {
             await wabrConsole.error('Device is not Authorised. \nPlease Allow Authorisation');
+            await printCenter({
+                str: '*******************************************************************************************************',
+                maxLength: titleLength,
+                gradient: gradient.atlas.multiline
+            });
+
+            console.log(
+                gradient.pastel.multiline(` 
+            while using the application a popup might appear on your device asking to 
+                                    Allow USB debugging ?
+                    click on 'Always allow from this computer' and click on 'Allow'\n`)
+            );
+            await printCenter({
+                str: '*******************************************************************************************************',
+                maxLength: titleLength,
+                gradient: gradient.atlas.multiline
+            });
             continue;
         }
-        sDevice =device;
+        sDevice = device;
     }
     return sDevice;
 };
@@ -234,6 +258,63 @@ const createWhatsappRestoration = async () => {
     console.log('\n\n\n');
     isRestoreSelected = true;
     selecedDevice = {};
+    await printCenter({
+        str: '*******************************************************************************************************',
+        maxLength: titleLength,
+        gradient: gradient.atlas.multiline
+    });
+    console.log(
+        gradient.pastel.multiline(
+            `
+Before we restoring Whatsapp Chat there are some prerequisites :
+1. You need to enable debugging Mode
+        a. Go to 'SETTINGS'
+        b. Go to 'About phone'
+        c. Click on 'Build number' 7 times
+            (a snack notification should popup stating - 'No need, you are already a developer')
+        d. go back to 'SETTINGS' and click on 'SYSTEM'
+        e. scroll down to 'Developer options' and click on it
+        f. Turn on USB debugging.
+        g. Connect your phone to the system`
+        )
+    );
+    await printCenter({
+        str: '*******************************************************************************************************',
+        maxLength: titleLength,
+        gradient: gradient.atlas.multiline
+    });
+
+    console.log(
+        gradient.pastel.multiline(` 
+    while using the application a popup might appear on your device asking to 
+                            Allow USB debugging ?
+        h. click on 'Always allow from this computer' and click on 'Allow'`)
+    );
+    await printCenter({
+        str: '*******************************************************************************************************',
+        maxLength: titleLength,
+        gradient: gradient.atlas.multiline
+    });
+
+    console.log(
+        gradient.pastel.multiline(`            
+2. Make sure WhatsApp is not available or installed in your device. If whatsApp is installed Please uninstall the same.
+3. Install WhatsApp. AND DONOT OPEN THE APP.
+       `)
+    );
+    await printCenter({
+        str: '*******************************************************************************************************',
+        maxLength: titleLength,
+        gradient: gradient.atlas.multiline
+    });
+
+    let _continue = await list({
+        name: 'Continue',
+        message: gradient.pastel.multiline('Do you want to continue and take restore of your WhatsApp Chat'),
+        choices: ['YES', 'NO']
+    });
+    if (_continue != 'YES') process.exit(1);
+
     selecedDevice = await getDevices();
     const backups = await checkBackups();
     const values = {};
@@ -244,7 +325,7 @@ const createWhatsappRestoration = async () => {
     });
     const restorationRes = await list({
         name: 'backup or restore',
-        message: gradient.pastel.multiline('Do you want to Create a backup or Restore a previous backup?'),
+        message: gradient.pastel.multiline('Please select a backup to restore'),
         choices
     });
     let userSelection = values[restorationRes];
@@ -266,7 +347,31 @@ const createWhatsappRestoration = async () => {
             print: true
         });
     }
-    console.log(gradient.pastel.multiline('WhatsApp Backup has been restored\n\n\n'));
+    await printCenter({
+        str: '*******************************************************************************************************',
+        maxLength: titleLength,
+        gradient: gradient.atlas.multiline
+    });
+    console.log(
+        gradient.pastel.multiline(`
+            WhatsApp Backup has been restored
+            1. Login to whatsapp
+            2. WhatsApp will detect chat backup
+            3. Click on Restore
+            `)
+    );
+
+    await printCenter({
+        str: '*******************************************************************************************************',
+        maxLength: titleLength,
+        gradient: gradient.atlas.multiline
+    });
+    let _end = await list({
+        name: 'Continue',
+        message: gradient.pastel.multiline('Do you want to continue and take restore of your WhatsApp Chat'),
+        choices: ['YES', 'NO']
+    });
+    if (_end != 'YES') process.exit(1);
 };
 
 await welcome();

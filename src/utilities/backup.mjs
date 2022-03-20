@@ -42,10 +42,12 @@ const checkBackups = async () => {
             return {
                 deviceId,
                 time: new Date(+EPOCH),
+                epoch : +EPOCH,
                 success : !!success,
                 filename : backup
             };
         });
+        backupList = backupList.sort((a,b)=>b.epoch - a.epoch);
     return {
         status : true,
         res :backupList,

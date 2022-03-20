@@ -9,6 +9,7 @@ import printCenter from './utilities/printCenter.mjs';
 import { createBackup, checkBackups } from './utilities/backup.mjs';
 import { list } from './utilities/enquire.mjs';
 import { restoreBackup } from './utilities/restore.mjs';
+import {backupinfo,restoreInfo} from './utilities/info.mjs'
 const titleLength = 117;
 let selecedDevice = {};
 let isRestoreSelected = false;
@@ -49,68 +50,8 @@ const welcome = async () => {
     console.log(bOr);
     switch (bOr) {
         case 'BACKUP':
-            console.log(
-                gradient.pastel.multiline(
-                    `
-Before we backup Whatsapp Chat there are some prerequisites :
-        1. You need to enable debugging Mode
-                a. Go to 'SETTINGS'
-                b. Go to 'About phone'
-                c. Click on 'Build number' 7 times
-                    (a snack notification should popup stating - 'No need, you are already a developer')
-                d. go back to 'SETTINGS' and click on 'SYSTEM'
-                e. scroll down to 'Developer options' and click on it
-                f. Turn on USB debugging.
-                g. Connect your phone to the system`
-                )
-            );
-            await printCenter({
-                str: '*******************************************************************************************************',
-                maxLength: titleLength,
-                gradient: gradient.atlas.multiline
-            });
-
-            console.log(
-                gradient.pastel.multiline(` 
-            while using the application a popup might appear on your device asking to 
-                                    Allow USB debugging ?
-                h. click on 'Always allow from this computer' and click on 'Allow'`)
-            );
-            await printCenter({
-                str: '*******************************************************************************************************',
-                maxLength: titleLength,
-                gradient: gradient.atlas.multiline
-            });
-
-            console.log(
-                gradient.pastel.multiline(`            
-        2. Create Backup from Whatsapp
-                a. Click on the 3 dots(menu) on the top right of your screen
-                b. Click on 'settings'
-                c. click on 'Chats'
-                d. click on 'Chat backup'
-                e. click on Backup to Google Drive
-                f. select 'Never'
-                g. Click on the Green Backup Button`)
-            );
-            await printCenter({
-                str: '*******************************************************************************************************',
-                maxLength: titleLength,
-                gradient: gradient.atlas.multiline
-            });
-
-            console.log(
-                gradient.pastel.multiline(`
-                                This will create the chat backup on your Android phone.
-                This process might take some time
-                `)
-            );
-            await printCenter({
-                str: '*******************************************************************************************************',
-                maxLength: titleLength,
-                gradient: gradient.atlas.multiline
-            });
-
+           
+            await backupinfo(titleLength);
             const continuePrompt = await list({
                 name: 'continue Prompt',
                 message: gradient.pastel.multiline('Ready To Continue'),
@@ -258,59 +199,10 @@ const createWhatsappRestoration = async () => {
     console.log('\n\n\n');
     isRestoreSelected = true;
     selecedDevice = {};
-    await printCenter({
-        str: '*******************************************************************************************************',
-        maxLength: titleLength,
-        gradient: gradient.atlas.multiline
-    });
-    console.log(
-        gradient.pastel.multiline(
-            `
-Before we restoring Whatsapp Chat there are some prerequisites :
-1. You need to enable debugging Mode
-        a. Go to 'SETTINGS'
-        b. Go to 'About phone'
-        c. Click on 'Build number' 7 times
-            (a snack notification should popup stating - 'No need, you are already a developer')
-        d. go back to 'SETTINGS' and click on 'SYSTEM'
-        e. scroll down to 'Developer options' and click on it
-        f. Turn on USB debugging.
-        g. Connect your phone to the system`
-        )
-    );
-    await printCenter({
-        str: '*******************************************************************************************************',
-        maxLength: titleLength,
-        gradient: gradient.atlas.multiline
-    });
-
-    console.log(
-        gradient.pastel.multiline(` 
-    while using the application a popup might appear on your device asking to 
-                            Allow USB debugging ?
-        h. click on 'Always allow from this computer' and click on 'Allow'`)
-    );
-    await printCenter({
-        str: '*******************************************************************************************************',
-        maxLength: titleLength,
-        gradient: gradient.atlas.multiline
-    });
-
-    console.log(
-        gradient.pastel.multiline(`            
-2. Make sure WhatsApp is not available or installed in your device. If whatsApp is installed Please uninstall the same.
-3. Install WhatsApp. AND DONOT OPEN THE APP.
-       `)
-    );
-    await printCenter({
-        str: '*******************************************************************************************************',
-        maxLength: titleLength,
-        gradient: gradient.atlas.multiline
-    });
-
+    await restoreInfo(titleLength);
     let _continue = await list({
         name: 'Continue',
-        message: gradient.pastel.multiline('Do you want to continue and take restore of your WhatsApp Chat'),
+        message: gradient.pastel.multiline('Do you want to continue and restore your WhatsApp Chat'),
         choices: ['YES', 'NO']
     });
     if (_continue != 'YES') process.exit(1);
@@ -318,8 +210,8 @@ Before we restoring Whatsapp Chat there are some prerequisites :
     selecedDevice = await getDevices();
     const backups = await checkBackups();
     const values = {};
-    let choices = backups?.res?.map((backup) => {
-        const key = `backup for(${backup.deviceId})[${backup.time.toLocaleString()}] || restorable - ${backup.success}`;
+    let choices = backups?.res?.map((backup,i) => {
+        const key = `${i+1}. backup for(${backup.deviceId})[${backup.time.toLocaleString()}] || restorable - ${backup.success ? 'YES' :'NO'}`;
         values[key] = backup;
         return key;
     });
@@ -368,10 +260,12 @@ Before we restoring Whatsapp Chat there are some prerequisites :
     });
     let _end = await list({
         name: 'Continue',
-        message: gradient.pastel.multiline('Do you want to continue and take restore of your WhatsApp Chat'),
-        choices: ['YES', 'NO']
+        message: gradient.pastel.multiline('Restoration is complete'),
+        choices: ['Quit','Start Again']
     });
-    if (_end != 'YES') process.exit(1);
+    if(_end == 'Start Again'){
+        return welcome()
+    }
 };
 
 await welcome();

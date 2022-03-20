@@ -16,10 +16,18 @@ const log = (param) => {
     // console.log(param)
 };
 
+const error = async (param,print=true)=> {
+    colorText({
+        data: param,
+        color: 'red',
+        print: print
+    });
+    return
+}
 const colorText = ({ data, color, print = false }) => {
     const msg = chalk?.[color].bold(data);
     if (print) console.log(msg);
     return msg;
 };
 
-export { log, colorText };
+export { log, colorText ,error};

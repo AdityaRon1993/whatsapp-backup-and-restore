@@ -1,4 +1,4 @@
-import fs, { fdatasync } from 'fs';
+import fs, { fdatasync, renameSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { adbCreateBackup } from './adb.mjs';
@@ -11,7 +11,8 @@ const createBackup = async ({ device }) => {
     if (!isExists) {
         fs.mkdirSync(backupLocation);
     }
-    let newBackupLocation = path.join(backupLocation, `WABR_${device.deviceId}_${Date.now()}`);
+    let filename = `WABR_${device.deviceId}_${Date.now()}`
+    let newBackupLocation = path.join(backupLocation, filename);
     fs.mkdirSync(newBackupLocation);
     const output = await adbCreateBackup({
         deviceId: device.deviceId,
@@ -20,6 +21,7 @@ const createBackup = async ({ device }) => {
     if (output == 1) {
         fs.rmSync(newBackupLocation);
     }
+    fs,renameSync(newBackupLocation,path.join(backupLocation,filename+"_success"))
     return output;
 };
 
@@ -36,10 +38,12 @@ const checkBackups = async () => {
     let backupList = list
         .filter((backup) => backup.indexOf('WABR_') > -1)
         .map((backup) => {
-            let [WABR, deviceId, EPOCH] = backup.split('_');
+            let [WABR, deviceId, EPOCH,success] = backup.split('_');
             return {
                 deviceId,
-                time: new Date(+EPOCH)
+                time: new Date(+EPOCH),
+                success : !!success,
+                filename : backup
             };
         });
     return {

@@ -74,7 +74,7 @@ const adbCreateBackup = ({ deviceId, backupLocation }) =>
                 `-s`,
                 `${deviceId}`,
                 `pull`,
-                `${_c.excecute.DOWNLOAD_WHATSAPP_BACKUP(deviceId)}`,
+                `${_c.excecute.DOWNLOAD_WHATSAPP_BACKUP}`,
                 `${backupLocation}`
             ],
             {
@@ -89,5 +89,28 @@ const adbCreateBackup = ({ deviceId, backupLocation }) =>
             }
         });
     });
+const adbStartRestoration = ({ deviceId, backupLocation }) =>
+    new Promise((response, reject) => {
+        let adb = spawn(
+            `${adb_path}`,
+            [
+                `-s`,
+                `${deviceId}`,
+                `push`,
+                `${backupLocation}`,
+                `${_c.excecute.UPLOAD_WHATSAPP_BACKUP}`
+            ],
+            {
+                stdio: 'inherit'
+            }
+        );
+        adb.on('exit', function (code) {
+            if (code == 0) {
+                response(code);
+            } else {
+                reject(code);
+            }
+        });
+    });
 
-export { executeAdbCommand, adbCreateBackup };
+export { executeAdbCommand, adbCreateBackup,adbStartRestoration };

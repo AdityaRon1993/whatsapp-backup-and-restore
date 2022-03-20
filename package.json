@@ -1,0 +1,37 @@
+{
+  "name": "whatsapp-backup-and-restore",
+  "version": "0.1.0",
+  "description": "Backup and restore whatsapp chat and media",
+  "main": "bin/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node ./bin/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AdityaRon1993/whatsapp-backup-and-restore.git"
+  },
+  "keywords": [
+    "whatsapp",
+    "backup"
+  ],
+  "bin": {
+    "wabr": "./bin/index.js"
+  },
+  "author": "Ron opensourced",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AdityaRon1993/whatsapp-backup-and-restore/issues"
+  },
+  "homepage": "https://github.com/AdityaRon1993/whatsapp-backup-and-restore#readme",
+  "dependencies": {
+    "boxen": "^6.2.1",
+    "chalk": "^5.0.1",
+    "chalk-animation": "^1.6.0",
+    "figlet": "^1.5.2",
+    "gradient-string": "^2.0.0",
+    "inquirer": "^8.2.1",
+    "nanospinner": "^1.0.0"
+  }
+}
